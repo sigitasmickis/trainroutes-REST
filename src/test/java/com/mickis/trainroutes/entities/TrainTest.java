@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalTime;
@@ -95,7 +97,7 @@ class TrainTest {
     public void givenOneTrain_whenFindCRoute_itIsNotFound() {
         var cityVilnius = cityRepository.save(new City("Vilnius"));
         var cityKaunas = cityRepository.save(new City("Kaunas"));
-        var cityKlaipeda = cityRepository.save(new City("Klaipeda"));
+        var cityKlaipeda = cityRepository.save(new City("Klaipėda"));
         var departTime = LocalTime.of(19, 15);
         var arriveTime = LocalTime.of(20, 30);
         var train = new Train("Tr-065", cityVilnius, cityKaunas,
