@@ -40,4 +40,7 @@ public class Train {
     @NonNull
     @Column(name = "arrival_time")
     private LocalTime arrivalTime;
+
+
+//    public Page<Train>
 }
