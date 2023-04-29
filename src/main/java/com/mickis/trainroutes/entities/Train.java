@@ -19,13 +19,18 @@ public class Train {
     private long id;
 
     @NonNull
-    @Column(name = "train_no")
+    @Column(name = "train_no", length = 15)
     private String trainNumber;
 
     @NonNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "citifrom_id", nullable = false)
     private City cityFrom;
+
+    @NonNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cityto_id", nullable = false)
+    private City cityTo;
 
 
     @NonNull
