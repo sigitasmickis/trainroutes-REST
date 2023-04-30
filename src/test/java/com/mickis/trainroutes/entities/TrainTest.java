@@ -86,10 +86,13 @@ class TrainTest {
         var arriveTime = LocalTime.of(20, 30);
         var train = new Train("Tr-065", cityVilnius, cityKaunas,
                 departTime, arriveTime);
+        train.setPriceRate(100);
         var savedTrain = trainRepository.save(train);
         var persistedTrain = entityManager.find(Train.class, savedTrain.getId());
         var found = trainRepository.findByCityFrom(cityVilnius);
         assertEquals(persistedTrain, found);
+        assertEquals(100, found.getPriceRate());
+        System.out.println(found);
 
     }
 
@@ -102,11 +105,12 @@ class TrainTest {
         var arriveTime = LocalTime.of(20, 30);
         var train = new Train("Tr-065", cityVilnius, cityKaunas,
                 departTime, arriveTime);
+
         var savedTrain = trainRepository.save(train);
-        var persistedTrain = entityManager.find(Train.class, savedTrain.getId());
         List<Train> found = trainRepository
                 .findByCityFromAndCityTo(cityVilnius, cityKlaipeda, PageRequest.of(0, 2));
         assertEquals(List.of(), found);
+        System.out.println(found);
     }
 
 

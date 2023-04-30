@@ -10,10 +10,11 @@ import lombok.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class City {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @NonNull

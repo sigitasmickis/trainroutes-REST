@@ -35,6 +35,7 @@ class CityTest {
         var persistedCity = entityManager.persist(city);
         var foundCity = cityRepository.findByName("Vilnius");
         assertEquals(persistedCity,foundCity);
+        System.out.println(foundCity);
     }
 
 }

@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "clients")
 @Getter
@@ -16,13 +19,29 @@ import lombok.*;
 @NoArgsConstructor(force = true)
 public class Client {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
+    @Column
     private long userId;
 
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Ticket> tickets = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "clientTickets: " + tickets;
+    }
+
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
+
+
+//        ticket.setClient(this);
+    }
 
 
 }
