@@ -13,7 +13,7 @@ import lombok.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
-//@NoArgsConstructor(force = true)
+@NoArgsConstructor(force = true)
 public class Client {
 
     @Id
@@ -21,12 +21,8 @@ public class Client {
     private long id;
 
     @NonNull
-    private String name;
+    private long userId;
 
-    @NonNull
-    private String surname;
 
-    @NonNull
-    private String email;
 
 }

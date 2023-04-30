@@ -22,7 +22,7 @@ class ClientTest {
 
     @Test
     public void whenClientCreated_itIsPersisted() {
-        var client = new Client("min", "min","email@email.com");
+        var client = new Client(2L);
         var savedClient = clientRepository.save(client);
         var persistedClient = entityManager.find(Client.class, savedClient.getId());
         assertEquals(savedClient, persistedClient);
@@ -30,10 +30,22 @@ class ClientTest {
 
     @Test
     public void whenReadingClient_theyAreFoundByName() {
-        var client = new Client("min", "min","email@email.com");
+        var client = new Client(2L);
         var persistedClient = entityManager.persist(client);
-        var foundClient = clientRepository.findByName("min");
+        var foundClient = clientRepository.findByUserId(2L).get();
         assertEquals(persistedClient, foundClient);
+    }
+
+    @Test
+    public void whenReadingClient_theyAreNotFoundByName() {
+        var client = new Client(2L);
+        var persistedClient = entityManager.persist(client);
+        var client2 = new Client(3L);
+        var foundClient = clientRepository
+                .findByUserId(client2.getUserId())
+                .orElse(entityManager.persist(client2));
+        var persistedClient2 = clientRepository.findByUserId(3L).get();
+        assertEquals(persistedClient2, foundClient);
     }
 
 }
