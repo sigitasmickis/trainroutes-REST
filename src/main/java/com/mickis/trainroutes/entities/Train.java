@@ -17,6 +17,7 @@ import java.util.Set;
 @ToString
 //@EqualsAndHashCode(exclude = "city")
 @RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 public class Train {
 
     @Id
