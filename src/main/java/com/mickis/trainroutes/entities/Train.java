@@ -64,6 +64,7 @@ public class Train {
                 ", cityTo=" + cityTo.getName() +
                 ", departTime=" + departTime +
                 ", arrivalTime=" + arrivalTime +
+                ", priceRate=" + priceRate +
                 '}';
     }
 

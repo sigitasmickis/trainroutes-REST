@@ -22,7 +22,7 @@ public class Ticket {
     private long id;
 
     @NonNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     @JoinColumn(name = "train_id", nullable = false)
@@ -39,13 +39,14 @@ public class Ticket {
     @JsonIgnore
     private Client client;
 
+
     @Override
     public String toString() {
-        return "trainNumber=" + trainId.getTrainNumber() +
+        return "Ticket to: " +
+                "trainNumber=" + trainId.getTrainNumber() +
                 ", fromCity=" + trainId.getCityFrom().getName() +
                 ", toCity=" + trainId.getCityTo().getName() +
                 ", departTime" + trainId.getDepartTime() +
-                ", clientPrice=" + userPrice +
-                '}';
+                ", clientPrice=" + userPrice;
     }
 }

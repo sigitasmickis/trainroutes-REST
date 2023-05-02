@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalTime;
@@ -38,76 +36,82 @@ class TicketTest {
     @Autowired
     private TicketRepository ticketRepository;
 
-    public Train createNewTrain(String destCity, int priceRate) {
+    public Train createNewTrain(String trainNumber, String destCity, int priceRate) {
         var cityVilnius = cityRepository.save(new City("Vilnius"));
         var cityKaunas = cityRepository.save(new City(destCity));
         var departTime = LocalTime.of(19, 15);
         var arriveTime = LocalTime.of(20, 30);
-        var train = new Train("Tr-065", cityVilnius, cityKaunas,
+        var train = new Train(trainNumber, cityVilnius, cityKaunas,
                 departTime, arriveTime);
         train.setPriceRate(priceRate);
         return trainRepository.save(train);
     }
 
-    private Client getClient(long l) {
+    private Client getNewClient(long l) {
         var client = new Client(l);
         var persistedClient = clientRepository.save(client);
         return persistedClient;
     }
 
-    private Ticket getTicket(Train train1, Client client) {
-        var ticket = new Ticket(train1, train1.getPriceRate()*7/10);
+    private Ticket getNewTicket(Train train1, Client client, int discount) {
+        var ticket = new Ticket(train1, train1.getPriceRate() * discount / 100);
+        ticket.setClient(client);
         return ticketRepository.save(ticket);
     }
 
     @Test
-    public void givenOneTrain_whenTicketIsBought_TicketIsCreated() {
-        var train1 = createNewTrain("Kaunas", 10000);
-        var persistedClient1 = getClient(2L);
+    public void givenOneTrain_whenTicketIsBought_TicketIsAddedToClient() {
+        var train1 = createNewTrain("Tr-065","Kaunas", 10000);
+        var persistedClient1 = getNewClient(2L);
 
-        var persistedTicket = getTicket(train1, persistedClient1);
+        var persistedTicket = getNewTicket(train1, persistedClient1, 70);
         var foundTicket = entityManager.find(Ticket.class, persistedTicket.getId());
         assertEquals("Kaunas", foundTicket.getTrainId().getCityTo().getName());
         assertEquals(7000, foundTicket.getUserPrice());
     }
 
     @Test
-    public void givenOneTrain_whenTicketIsBought_TicketIsAddedToClient() {
-        var train1 = createNewTrain("Kaunas", 10000);
-        var train2 = createNewTrain("Klaipėda", 15000);
-        var client1 = new Client(2L);
-        var client2 = new Client(3L);
-        var persistedClient1 = clientRepository.save(client1);
-        var persistedClient2 = clientRepository.save(client2);
-        var ticket1 = new Ticket(train1, train1.getPriceRate()*7/10);
-        ticket1.setClient(persistedClient1);
-        var persistedTicket1 = ticketRepository.save(ticket1);
-//        persistedClient1.addTicket(persistedTicket1);
-//        var ticket2 = new Ticket(train1, train2.getPriceRate()*8/10, persistedClient1);
-//        ticket2.setClient(persistedClient1);
-//        var persistedTicket2 = ticketRepository.save(ticket2);
-
-//        client1.addTicket(persistedTicket2);
-//        var updatedClient = clientRepository.save(client1);
-//        var foundClient = clientRepository.findByUserId(2L).get();
-//        System.out.println(foundClient);
-////        client1.addTicket(persistedTicket2);
-//        System.out.println(foundClient);
-//        assertEquals(train1, foundClient.getTickets().);
+    public void givenOneTrain_whenTwoTicketAreBought_TicketsAreAddedToClients() {
+        var persistedTrain1 = createNewTrain("Tr-065","Kaunas", 10000);
+        var persistedClient1 = getNewClient(1L);
+        var persistedTicket1 = getNewTicket(persistedTrain1, persistedClient1, 70);
+        persistedClient1.addTicket(persistedTicket1);
+        var foundClient1 = entityManager.find(Client.class, persistedClient1.getId());
+        System.out.println(foundClient1);
+        var persistedClient2 = getNewClient(2L);
+        var persistedTicket2 = getNewTicket(persistedTrain1, persistedClient2, 80);
+        persistedClient2.addTicket(persistedTicket2);
+        var foundClient2 = entityManager.find(Client.class, persistedClient2.getId());
+        System.out.println(foundClient2);
     }
 
     @Test
-    public void givenOneTrain_whenTwoTicketsAreBoughtOnOneTrain_theyAreCreated() {
-        var train1 = createNewTrain("Kaunas", 10000);
-        var persistedClient1 = getClient(2L);
-        var persistedTicket1 = getTicket(train1, persistedClient1);
-//        var persistedTicket2 = getTicket(train1, persistedClient1);
-        var foundTicket = entityManager.find(Ticket.class, persistedTicket1.getId());
-//        assertEquals(, );
-
+    public void givenTwoTrains_whenForEachOneTicketisBought_TicketsAreAddedToClients() {
+        var persistedTrain1 = createNewTrain("Tr-065","Kaunas", 10000);
+        var persistedTrain2 = createNewTrain("Tr-089","Klaipėda", 15000);
+        var persistedClient1 = getNewClient(1L);
+        var persistedTicket1 = getNewTicket(persistedTrain1, persistedClient1, 70);
+        persistedClient1.addTicket(persistedTicket1);
+        var foundClient1 = entityManager.find(Client.class, persistedClient1.getId());
+        System.out.println(foundClient1);
+        var persistedClient2 = getNewClient(2L);
+        var persistedTicket2 = getNewTicket(persistedTrain2, persistedClient2, 80);
+        persistedClient2.addTicket(persistedTicket2);
+        var foundClient2 = entityManager.find(Client.class, persistedClient2.getId());
+        System.out.println(foundClient2);
     }
 
-
+    @Test
+    public void givenOneTrain_whenTwoTicketsAreBought_OnlyOneTicketIsAddedToClients() {
+        var persistedTrain1 = createNewTrain("Tr-065","Kaunas", 10000);
+        var persistedClient1 = getNewClient(1L);
+        var persistedTicket1 = getNewTicket(persistedTrain1, persistedClient1, 70);
+        var persistedTicket2 = getNewTicket(persistedTrain1, persistedClient1, 80);
+        persistedClient1.addTicket(persistedTicket1);
+        persistedClient1.addTicket(persistedTicket2);
+        var foundClient1 = entityManager.find(Client.class, persistedClient1.getId());
+        System.out.println(foundClient1);
+    }
 
 
 }

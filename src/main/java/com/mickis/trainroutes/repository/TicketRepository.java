@@ -11,9 +11,9 @@ import java.util.List;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket,Long> {
+//
+//    Page<Ticket> findByClientId(long clientId, Pageable pageable);
 
-    Page<Ticket> findByClientId(long clientId, Pageable pageable);
-
-    @Transactional
-    void deleteByClientId(long clientId);
+//    @Transactional
+//    void deleteByClientId(long clientId);
 }

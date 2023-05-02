@@ -33,14 +33,12 @@ public class Client {
 
     @Override
     public String toString() {
-        return "clientTickets: " + tickets;
+        return "client " + userId +
+                " tickets: " + tickets;
     }
 
     public void addTicket(Ticket ticket) {
         tickets.add(ticket);
-
-
-//        ticket.setClient(this);
     }
 
 

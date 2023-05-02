@@ -11,6 +11,7 @@ import lombok.*;
 @ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor(force = true)
 public class City {
 
     @Id
