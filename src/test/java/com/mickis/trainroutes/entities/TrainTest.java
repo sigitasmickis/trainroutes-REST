@@ -108,7 +108,7 @@ class TrainTest {
 
         var savedTrain = trainRepository.save(train);
         List<Train> found = trainRepository
-                .findByCityFromAndCityTo(cityVilnius, cityKlaipeda, PageRequest.of(0, 2));
+                .findByCityFromAndCityTo(cityVilnius, cityKlaipeda);
         assertEquals(List.of(), found);
         System.out.println(found);
     }

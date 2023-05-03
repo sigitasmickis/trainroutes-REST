@@ -4,7 +4,9 @@ import com.mickis.trainroutes.entities.City;
 import com.mickis.trainroutes.entities.Train;
 import com.mickis.trainroutes.errors.IllegalCityError;
 import com.mickis.trainroutes.errors.IllegalLocalTimeFormat;
+import com.mickis.trainroutes.errors.MissingRouteException;
 import com.mickis.trainroutes.io.TrainDTO;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -46,15 +48,22 @@ public class TrainServices {
     }
 
     public Train createNewTrainDTO(TrainDTO trainDTO) {
-
-        City dbCityFrom = cityRepository.findByName(trainDTO.getCityFrom()).orElseThrow(IllegalCityError::new);
-        City dbCityTo = cityRepository.findByName(trainDTO.getCityTo()).orElseThrow(IllegalCityError::new);
-        LocalTime departTimeLt = parseLocalTime(trainDTO.getDepartTime());
-        LocalTime arrivalTimeLt = parseLocalTime(trainDTO.getArrivalTime());
-        Train train = new Train(trainDTO.getTrainNumber(), dbCityFrom, dbCityTo, departTimeLt, arrivalTimeLt);
-        train.setPriceRate(train.getPriceRate() == 0 ? 1000 : train.getPriceRate());
-        var savedTrain = trainRepository.save(train);
-        return savedTrain;
+        Train existingTrain = trainRepository
+                .findByTrainNumber(trainDTO.getTrainNumber())
+                .orElse(null);
+        if (existingTrain == null) {
+            City dbCityFrom = cityRepository.findByName(trainDTO.getCityFrom()).orElseThrow(IllegalCityError::new);
+            City dbCityTo = cityRepository.findByName(trainDTO.getCityTo()).orElseThrow(IllegalCityError::new);
+            LocalTime departTimeLt = parseLocalTime(trainDTO.getDepartTime());
+            LocalTime arrivalTimeLt = parseLocalTime(trainDTO.getArrivalTime());
+            Train train = new Train(trainDTO.getTrainNumber(), dbCityFrom, dbCityTo, departTimeLt, arrivalTimeLt);
+            train.setPriceRate(train.getPriceRate() == 0 ? 1000 : train.getPriceRate());
+            var savedTrain = trainRepository.save(train);
+            return savedTrain;
+        } else {
+            System.out.println("train exist");
+            return existingTrain;
+        }
     }
 
     public LocalTime parseLocalTime(String timeStr) {
@@ -82,6 +91,21 @@ public class TrainServices {
                 .stream()
                 .map(t -> getTrainDTOFromDb(t))
                 .collect(Collectors.toList());
+    }
+
+    public List<TrainDTO> getRouteFromCityToCity(String from, String to) {
+        PageRequest pageRequest = PageRequest.of(0, 3);
+        City dbCityFrom = cityRepository.findByName(from).orElseThrow(IllegalCityError::new);
+        City dbCityTo = cityRepository.findByName(to).orElseThrow(IllegalCityError::new);
+        List<TrainDTO> found = trainRepository.findByCityFromAndCityTo(dbCityFrom, dbCityTo)
+                .stream()
+                .map(t -> getTrainDTOFromDb(t))
+                .collect(Collectors.toList());
+        if (!found.isEmpty()) {
+            return found;
+        } else {
+            throw new MissingRouteException();
+        }
     }
 
 

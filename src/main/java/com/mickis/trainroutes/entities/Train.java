@@ -11,7 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "trains")
+@Table(name = "trains",
+uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"train_no"}, name = "train_number")
+})
 @Getter
 @Setter
 @ToString

@@ -7,12 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
 
 @SpringBootApplication
 public class TrainroutesApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(TrainroutesApplication.class, args);
+        ApplicationContext applicationContext =
+                SpringApplication.run(TrainroutesApplication.class, args);
+//        for (String name: applicationContext.getBeanDefinitionNames()) {
+//            System.out.println(name);
+//        }
     }
 
     @Autowired
@@ -54,8 +60,8 @@ public class TrainroutesApplication implements CommandLineRunner {
                 "Trakai", "Vilnius", "10:30", "11:20"));
         trainServices.createNewTrainDTO(new TrainDTO("Tr-055",
                 "Vilnius", "Klaipėda", "06:40", "11:05"));
-        System.out.println(trainServices.createNewTrainDTO(new TrainDTO("Tr-056",
-                "Klaipėda", "Vilnius", "16:30", "20:35")));
+        trainServices.createNewTrainDTO(new TrainDTO("Tr-056",
+                "Klaipėda", "Vilnius", "16:30", "20:35"));
 
 
     }

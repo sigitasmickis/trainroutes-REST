@@ -9,14 +9,16 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TrainRepository extends JpaRepository<Train, Long> {
 
-    List<Train> findByCityFromAndCityTo(City cityFrom, City CityTo, Pageable pageable);
+    List<Train> findByCityFromAndCityTo(City cityFrom, City CityTo);
 
     Train findByCityFrom(City cityFrom);
 
     Train findByDepartTime(LocalTime departTime);
 
+    Optional<Train> findByTrainNumber(String name);
 }
