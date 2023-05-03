@@ -2,6 +2,7 @@ package com.mickis.trainroutes.controller;
 
 import com.mickis.trainroutes.entities.Train;
 import com.mickis.trainroutes.io.CitiesDTO;
+import com.mickis.trainroutes.io.TrainDTO;
 import com.mickis.trainroutes.io.TrainsDTO;
 import com.mickis.trainroutes.repository.CityRepository;
 import com.mickis.trainroutes.repository.TrainRepository;
@@ -11,14 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class TrainController {
 
 
@@ -38,13 +37,22 @@ public class TrainController {
     @GetMapping("/trains/cities")
     public ResponseEntity<CitiesDTO> cities() {
         return new ResponseEntity<>(new CitiesDTO(cityRepository.findAll()),
-                HttpStatus.OK );
+                HttpStatus.OK);
     }
 
     @GetMapping("/trains/route")
     public ResponseEntity<TrainsDTO> trainsRoute(@RequestParam String from, @RequestParam String to) {
         return new ResponseEntity<>(new TrainsDTO(trainServices.getRouteFromCityToCity(from, to)),
-                HttpStatus.OK );
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/trains")
+    public ResponseEntity<TrainDTO> newTrain(@RequestBody TrainDTO newTrain) {
+        if (trainServices.createNewTrainDTO(newTrain)) {
+            return new ResponseEntity<>(newTrain,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(newTrain, HttpStatus.NOT_MODIFIED);
+        }
     }
 
 

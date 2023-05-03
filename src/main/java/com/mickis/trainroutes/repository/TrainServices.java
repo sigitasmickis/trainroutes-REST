@@ -6,6 +6,8 @@ import com.mickis.trainroutes.errors.IllegalCityError;
 import com.mickis.trainroutes.errors.IllegalLocalTimeFormat;
 import com.mickis.trainroutes.errors.MissingRouteException;
 import com.mickis.trainroutes.io.TrainDTO;
+import com.mickis.trainroutes.io.TrainsDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,12 @@ public class TrainServices {
     DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
 
 
-////    @Autowired
+    //        @Autowired
     private TrainRepository trainRepository;
 
-//    @Autowired
+    //        @Autowired
     private CityRepository cityRepository;
+
 
     public TrainServices(CityRepository cityRepository, TrainRepository trainRepository) {
         this.cityRepository = cityRepository;
@@ -47,11 +50,8 @@ public class TrainServices {
         return train;
     }
 
-    public Train createNewTrainDTO(TrainDTO trainDTO) {
-        Train existingTrain = trainRepository
-                .findByTrainNumber(trainDTO.getTrainNumber())
-                .orElse(null);
-        if (existingTrain == null) {
+    public boolean createNewTrainDTO(TrainDTO trainDTO) {
+        if (ifTrainIsNotPresent(trainDTO)) {
             City dbCityFrom = cityRepository.findByName(trainDTO.getCityFrom()).orElseThrow(IllegalCityError::new);
             City dbCityTo = cityRepository.findByName(trainDTO.getCityTo()).orElseThrow(IllegalCityError::new);
             LocalTime departTimeLt = parseLocalTime(trainDTO.getDepartTime());
@@ -59,11 +59,18 @@ public class TrainServices {
             Train train = new Train(trainDTO.getTrainNumber(), dbCityFrom, dbCityTo, departTimeLt, arrivalTimeLt);
             train.setPriceRate(train.getPriceRate() == 0 ? 1000 : train.getPriceRate());
             var savedTrain = trainRepository.save(train);
-            return savedTrain;
+            return true;
         } else {
-            System.out.println("train exist");
-            return existingTrain;
+            return false;
         }
+    }
+
+    public boolean ifTrainIsNotPresent(TrainDTO trainDTO) {
+        Train existingTrain = trainRepository
+                .findByTrainNumber(trainDTO.getTrainNumber())
+                .orElse(null);
+        return (existingTrain == null) ? true : false;
+
     }
 
     public LocalTime parseLocalTime(String timeStr) {
@@ -107,8 +114,6 @@ public class TrainServices {
             throw new MissingRouteException();
         }
     }
-
-
 
 
 }

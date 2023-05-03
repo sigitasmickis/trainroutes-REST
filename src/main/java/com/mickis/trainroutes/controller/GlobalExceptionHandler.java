@@ -1,4 +1,4 @@
-package com.mickis.trainroutes.config;
+package com.mickis.trainroutes.controller;
 
 import com.mickis.trainroutes.entities.Train;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 @EnableWebMvc
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
