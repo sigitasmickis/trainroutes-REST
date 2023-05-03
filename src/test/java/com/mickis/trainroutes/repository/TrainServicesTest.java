@@ -79,7 +79,7 @@ class TrainServicesTest {
         TrainDTO trainDTO = new TrainDTO("Tr-065",
                 "Vilnius", "Kaunas", "09:15", "10:20");
         Mockito.when(trainRepository.save(train)).thenReturn(train);
-        trainServices.createNewTrainDTO(trainDTO);
+        trainServices.createNewTrain(trainDTO);
 
         Mockito.verify(trainRepository).save(any());
 

@@ -6,9 +6,6 @@ import com.mickis.trainroutes.errors.IllegalCityError;
 import com.mickis.trainroutes.errors.IllegalLocalTimeFormat;
 import com.mickis.trainroutes.errors.MissingRouteException;
 import com.mickis.trainroutes.io.TrainDTO;
-import com.mickis.trainroutes.io.TrainsDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -50,7 +47,7 @@ public class TrainServices {
         return train;
     }
 
-    public boolean createNewTrainDTO(TrainDTO trainDTO) {
+    public boolean createNewTrain(TrainDTO trainDTO) {
         if (ifTrainIsNotPresent(trainDTO)) {
             City dbCityFrom = cityRepository.findByName(trainDTO.getCityFrom()).orElseThrow(IllegalCityError::new);
             City dbCityTo = cityRepository.findByName(trainDTO.getCityTo()).orElseThrow(IllegalCityError::new);
@@ -58,7 +55,7 @@ public class TrainServices {
             LocalTime arrivalTimeLt = parseLocalTime(trainDTO.getArrivalTime());
             Train train = new Train(trainDTO.getTrainNumber(), dbCityFrom, dbCityTo, departTimeLt, arrivalTimeLt);
             train.setPriceRate(train.getPriceRate() == 0 ? 1000 : train.getPriceRate());
-            var savedTrain = trainRepository.save(train);
+            trainRepository.save(train);
             return true;
         } else {
             return false;
@@ -101,7 +98,6 @@ public class TrainServices {
     }
 
     public List<TrainDTO> getRouteFromCityToCity(String from, String to) {
-        PageRequest pageRequest = PageRequest.of(0, 3);
         City dbCityFrom = cityRepository.findByName(from).orElseThrow(IllegalCityError::new);
         City dbCityTo = cityRepository.findByName(to).orElseThrow(IllegalCityError::new);
         List<TrainDTO> found = trainRepository.findByCityFromAndCityTo(dbCityFrom, dbCityTo)
@@ -115,5 +111,25 @@ public class TrainServices {
         }
     }
 
+//    City dbCityFrom = cityRepository.findByName(trainDTO.getCityFrom()).orElseThrow(IllegalCityError::new);
+//    City dbCityTo = cityRepository.findByName(trainDTO.getCityTo()).orElseThrow(IllegalCityError::new);
+//    LocalTime departTimeLt = parseLocalTime(trainDTO.getDepartTime());
+//    LocalTime arrivalTimeLt = parseLocalTime(trainDTO.getArrivalTime());
 
+    public TrainDTO updateTrain(TrainDTO trainDTO) {
+        Train train = trainRepository
+                .findByTrainNumber(trainDTO.getTrainNumber()).get();
+        train.setTrainNumber(trainDTO.getTrainNumber());
+        train.setCityFrom(cityRepository.findByName(trainDTO.getCityFrom()).orElseThrow(IllegalCityError::new));
+        train.setCityTo(cityRepository.findByName(trainDTO.getCityTo()).orElseThrow(IllegalCityError::new));
+        train.setDepartTime(parseLocalTime(trainDTO.getDepartTime()));
+        train.setArrivalTime(parseLocalTime(trainDTO.getArrivalTime()));
+        trainRepository.save(train);
+        return trainDTO;
+    }
+
+    public void deleteTrain(String trainNo) {
+        Train train = trainRepository.findByTrainNumber(trainNo).orElseThrow();
+        trainRepository.deleteById(train.getId());
+    }
 }

@@ -1,21 +1,14 @@
 package com.mickis.trainroutes.controller;
 
-import com.mickis.trainroutes.entities.Train;
 import com.mickis.trainroutes.io.CitiesDTO;
 import com.mickis.trainroutes.io.TrainDTO;
 import com.mickis.trainroutes.io.TrainsDTO;
 import com.mickis.trainroutes.repository.CityRepository;
-import com.mickis.trainroutes.repository.TrainRepository;
 import com.mickis.trainroutes.repository.TrainServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @RestController
 public class TrainController {
@@ -34,6 +27,8 @@ public class TrainController {
         );
     }
 
+
+
     @GetMapping("/trains/cities")
     public ResponseEntity<CitiesDTO> cities() {
         return new ResponseEntity<>(new CitiesDTO(cityRepository.findAll()),
@@ -47,13 +42,31 @@ public class TrainController {
     }
 
     @PostMapping("/trains")
-    public ResponseEntity<TrainDTO> newTrain(@RequestBody TrainDTO newTrain) {
-        if (trainServices.createNewTrainDTO(newTrain)) {
-            return new ResponseEntity<>(newTrain,HttpStatus.OK);
+    public ResponseEntity<TrainDTO> newTrain(@RequestBody TrainDTO newTrainDTO) {
+        if (trainServices.createNewTrain(newTrainDTO)) {
+            return new ResponseEntity<>(newTrainDTO,HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(newTrain, HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(newTrainDTO, HttpStatus.NOT_MODIFIED);
         }
     }
+
+    @PutMapping("/trains/trainNo")
+    public ResponseEntity<TrainDTO> replaceTrain(@RequestBody TrainDTO newTrainDTO) {
+        if (trainServices.ifTrainIsNotPresent(newTrainDTO)) {
+            trainServices.createNewTrain(newTrainDTO);
+            return new ResponseEntity<>(newTrainDTO,HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(trainServices.updateTrain(newTrainDTO), HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/trains/{trainNo}")
+    public ResponseEntity<String> deleteTrain(@PathVariable String trainNo) {
+        trainServices.deleteTrain(trainNo);
+        return new ResponseEntity<>(String.format("%s deleted!", trainNo), HttpStatus.OK);
+    }
+
+
 
 
 }
