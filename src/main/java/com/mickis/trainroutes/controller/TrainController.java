@@ -1,5 +1,6 @@
 package com.mickis.trainroutes.controller;
 
+import com.mickis.trainroutes.errors.UniqueTrainAlreadyExistException;
 import com.mickis.trainroutes.io.CitiesDTO;
 import com.mickis.trainroutes.io.TrainDTO;
 import com.mickis.trainroutes.io.TrainsDTO;
@@ -27,6 +28,11 @@ public class TrainController {
         );
     }
 
+    @GetMapping("trains/{trainNo}")
+    ResponseEntity<TrainDTO> one(@PathVariable String trainNo) {
+        return new ResponseEntity<>(trainServices.getTrainByTrainNo(trainNo), HttpStatus.OK);
+    }
+
 
 
     @GetMapping("/trains/cities")
@@ -46,7 +52,7 @@ public class TrainController {
         if (trainServices.createNewTrain(newTrainDTO)) {
             return new ResponseEntity<>(newTrainDTO,HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(newTrainDTO, HttpStatus.NOT_MODIFIED);
+            throw new UniqueTrainAlreadyExistException(newTrainDTO.getTrainNumber());
         }
     }
 

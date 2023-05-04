@@ -2,8 +2,8 @@ package com.mickis.trainroutes.repository;
 
 import com.mickis.trainroutes.entities.City;
 import com.mickis.trainroutes.entities.Train;
-import com.mickis.trainroutes.errors.IllegalCityError;
-import com.mickis.trainroutes.errors.IllegalLocalTimeFormat;
+import com.mickis.trainroutes.errors.IllegalCityException;
+import com.mickis.trainroutes.errors.IllegalLocalTimeParsingException;
 import com.mickis.trainroutes.io.TrainDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class TrainServicesTest {
 
     @Test
     public void whenLocalTimeStringIsSupplied_localTimeFormatFailed() {
-        assertThrows(IllegalLocalTimeFormat.class, () -> trainServices.parseLocalTime("12"));
+        assertThrows(IllegalLocalTimeParsingException.class, () -> trainServices.parseLocalTime("12"));
     }
 
     @Test
@@ -106,7 +106,7 @@ class TrainServicesTest {
         Mockito.when(cityRepository.findByName("Kaunas")).thenReturn(Optional.empty());
 
 
-        assertThrows(IllegalCityError.class, () -> trainServices.createNewTrain(
+        assertThrows(IllegalCityException.class, () -> trainServices.createNewTrain(
                 "Tr-065",
                 "Vilnius", "Kaunas", "09:15", "10:20", 100));
     }

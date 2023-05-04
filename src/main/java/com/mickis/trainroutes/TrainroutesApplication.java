@@ -24,7 +24,7 @@ public class TrainroutesApplication implements CommandLineRunner {
     @Autowired
     private TrainRepository trainRepository;
 
-    @Autowired
+//    @Autowired
     private TrainServices trainServices;
 
 
@@ -44,7 +44,7 @@ public class TrainroutesApplication implements CommandLineRunner {
     }
 
     private void initDao() {
-//		this.trainServices = new TrainServices(cityRepository, trainRepository);
+		this.trainServices = new TrainServices(cityRepository, trainRepository);
 //		initCities();
 //		initTrains();
     }

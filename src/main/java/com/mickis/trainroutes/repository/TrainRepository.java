@@ -22,5 +22,4 @@ public interface TrainRepository extends JpaRepository<Train, Long> {
 
     Optional<Train> findByTrainNumber(String name);
 
-    void deleteByTrainNumber(String trainNo);
 }

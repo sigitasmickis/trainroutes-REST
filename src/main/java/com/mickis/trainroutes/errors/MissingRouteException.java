@@ -3,7 +3,10 @@ package com.mickis.trainroutes.errors;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
+
 public class MissingRouteException extends RuntimeException{
 
+   public MissingRouteException(String from, String to) {
+      super(String.format("There is no direct route between %s and %s", from, to));
    }
+}
