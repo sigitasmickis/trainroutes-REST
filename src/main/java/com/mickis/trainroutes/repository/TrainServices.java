@@ -32,11 +32,11 @@ public class TrainServices {
         this.trainRepository = trainRepository;
     }
 
-    public Train createNewTrain(String trainNumber,
-                                String cityFrom,
-                                String cityTo,
-                                String departTime,
-                                String arrivalTime, int priceRate) {
+    public Train createNewTrainDTO(String trainNumber,
+                                   String cityFrom,
+                                   String cityTo,
+                                   String departTime,
+                                   String arrivalTime, int priceRate) {
 
         City dbCityFrom = cityRepository.findByName(cityFrom)
                 .orElseThrow(() -> new IllegalCityException(cityFrom));
@@ -50,7 +50,7 @@ public class TrainServices {
         return train;
     }
 
-    public boolean createNewTrain(TrainDTO trainDTO) {
+    public boolean createNewTrainDTO(TrainDTO trainDTO) {
         if (ifTrainIsNotPresent(trainDTO)) {
             City dbCityFrom = cityRepository.findByName(trainDTO.getCityFrom())
                     .orElseThrow(() -> new IllegalCityException(trainDTO.getCityFrom()));

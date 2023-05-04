@@ -59,7 +59,7 @@ class TrainServicesTest {
         Mockito.when(cityRepository.findByName(vilnius.getName())).thenReturn(Optional.of(vilnius));
         Mockito.when(cityRepository.findByName(kaunas.getName())).thenReturn(Optional.of(kaunas));
 
-        var savedTrain = trainServices.createNewTrain(
+        var savedTrain = trainServices.createNewTrainDTO(
                 "Tr-065",
                 "Vilnius", "Kaunas", "09:15", "10:20", 3500);
         System.out.println(savedTrain);
@@ -79,7 +79,7 @@ class TrainServicesTest {
         TrainDTO trainDTO = new TrainDTO("Tr-065",
                 "Vilnius", "Kaunas", "09:15", "10:20");
         Mockito.when(trainRepository.save(train)).thenReturn(train);
-        trainServices.createNewTrain(trainDTO);
+        trainServices.createNewTrainDTO(trainDTO);
 
         Mockito.verify(trainRepository).save(any());
 
@@ -93,7 +93,7 @@ class TrainServicesTest {
         Mockito.when(cityRepository.findByName(vilnius.getName())).thenReturn(Optional.of(vilnius));
         Mockito.when(cityRepository.findByName(kaunas.getName())).thenReturn(Optional.of(kaunas));
 
-        System.out.println(trainServices.createNewTrain(
+        System.out.println(trainServices.createNewTrainDTO(
                 "Tr-065",
                 "Vilnius", "Kaunas", "09:15", "10:20", 0));
     }
@@ -106,7 +106,7 @@ class TrainServicesTest {
         Mockito.when(cityRepository.findByName("Kaunas")).thenReturn(Optional.empty());
 
 
-        assertThrows(IllegalCityException.class, () -> trainServices.createNewTrain(
+        assertThrows(IllegalCityException.class, () -> trainServices.createNewTrainDTO(
                 "Tr-065",
                 "Vilnius", "Kaunas", "09:15", "10:20", 100));
     }

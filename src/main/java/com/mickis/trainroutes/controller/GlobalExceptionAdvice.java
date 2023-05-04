@@ -62,4 +62,11 @@ public class GlobalExceptionAdvice {
         return ex.getMessage();
     }
 
+    @ResponseBody
+    @ExceptionHandler(UpdatingTrainDTOBodyAndNumberMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String updatingTrainNumberAndDataContentMismatchExceptionHandler(UpdatingTrainDTOBodyAndNumberMismatchException ex) {
+        return ex.getMessage();
+    }
+
 }

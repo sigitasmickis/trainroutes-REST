@@ -1,6 +1,7 @@
 package com.mickis.trainroutes.controller;
 
 import com.mickis.trainroutes.errors.UniqueTrainAlreadyExistException;
+import com.mickis.trainroutes.errors.UpdatingTrainDTOBodyAndNumberMismatchException;
 import com.mickis.trainroutes.io.CitiesDTO;
 import com.mickis.trainroutes.io.TrainDTO;
 import com.mickis.trainroutes.io.TrainsDTO;
@@ -34,7 +35,6 @@ public class TrainController {
     }
 
 
-
     @GetMapping("/trains/cities")
     public ResponseEntity<CitiesDTO> cities() {
         return new ResponseEntity<>(new CitiesDTO(cityRepository.findAll()),
@@ -49,20 +49,25 @@ public class TrainController {
 
     @PostMapping("/trains")
     public ResponseEntity<TrainDTO> newTrain(@RequestBody TrainDTO newTrainDTO) {
-        if (trainServices.createNewTrain(newTrainDTO)) {
-            return new ResponseEntity<>(newTrainDTO,HttpStatus.OK);
+        if (trainServices.createNewTrainDTO(newTrainDTO)) {
+            return new ResponseEntity<>(newTrainDTO, HttpStatus.OK);
         } else {
             throw new UniqueTrainAlreadyExistException(newTrainDTO.getTrainNumber());
         }
     }
 
-    @PutMapping("/trains/trainNo")
-    public ResponseEntity<TrainDTO> replaceTrain(@RequestBody TrainDTO newTrainDTO) {
-        if (trainServices.ifTrainIsNotPresent(newTrainDTO)) {
-            trainServices.createNewTrain(newTrainDTO);
-            return new ResponseEntity<>(newTrainDTO,HttpStatus.CREATED);
+    @PutMapping("/trains/{trainNo}")
+    public ResponseEntity<TrainDTO> replaceTrain(@PathVariable String trainNo,
+                                                 @RequestBody TrainDTO trainDTO) {
+        if (trainDTO.getTrainNumber().equals(trainNo)) {
+            if (trainServices.ifTrainIsNotPresent(trainDTO)) {
+                trainServices.createNewTrainDTO(trainDTO);
+                return new ResponseEntity<>(trainDTO, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(trainServices.updateTrain(trainDTO), HttpStatus.OK);
+            }
         } else {
-            return new ResponseEntity<>(trainServices.updateTrain(newTrainDTO), HttpStatus.OK);
+            throw new UpdatingTrainDTOBodyAndNumberMismatchException(trainNo, trainDTO);
         }
     }
 
@@ -71,8 +76,6 @@ public class TrainController {
         trainServices.deleteTrain(trainNo);
         return new ResponseEntity<>(String.format("%s deleted!", trainNo), HttpStatus.OK);
     }
-
-
 
 
 }

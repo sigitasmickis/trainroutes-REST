@@ -50,17 +50,17 @@ public class TrainroutesApplication implements CommandLineRunner {
     }
 
     private void initTrains() {
-        trainServices.createNewTrain(new TrainDTO("Tr-065",
+        trainServices.createNewTrainDTO(new TrainDTO("Tr-065",
                 "Vilnius", "Kaunas", "09:15", "10:20"));
-        trainServices.createNewTrain(new TrainDTO("Tr-066",
+        trainServices.createNewTrainDTO(new TrainDTO("Tr-066",
                 "Kaunas", "Vilnius", "11:23", "12:45"));
-        trainServices.createNewTrain(new TrainDTO("Tr-082",
+        trainServices.createNewTrainDTO(new TrainDTO("Tr-082",
                 "Vilnius", "Trakai", "08:10", "09:00"));
-        trainServices.createNewTrain(new TrainDTO("Tr-083",
+        trainServices.createNewTrainDTO(new TrainDTO("Tr-083",
                 "Trakai", "Vilnius", "10:30", "11:20"));
-        trainServices.createNewTrain(new TrainDTO("Tr-055",
+        trainServices.createNewTrainDTO(new TrainDTO("Tr-055",
                 "Vilnius", "Klaipėda", "06:40", "11:05"));
-        trainServices.createNewTrain(new TrainDTO("Tr-056",
+        trainServices.createNewTrainDTO(new TrainDTO("Tr-056",
                 "Klaipėda", "Vilnius", "16:30", "20:35"));
 
 
