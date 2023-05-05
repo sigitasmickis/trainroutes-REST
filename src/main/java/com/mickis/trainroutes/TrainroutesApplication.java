@@ -27,6 +27,8 @@ public class TrainroutesApplication implements CommandLineRunner {
 //    @Autowired
     private TrainServices trainServices;
 
+    private ClientTicketsServices clientTicketsServices;
+
 
     @Autowired
     private ClientRepository clientRepository;
@@ -39,14 +41,26 @@ public class TrainroutesApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        initDao();
+//        initDao();
 
     }
 
     private void initDao() {
 		this.trainServices = new TrainServices(cityRepository, trainRepository);
-//		initCities();
-//		initTrains();
+        this.clientTicketsServices = new ClientTicketsServices(
+                trainServices,clientRepository,ticketRepository);
+		initCities();
+		initTrains();
+        initTickets();
+    }
+
+    private void initTickets() {
+        var ticket1 = clientTicketsServices.getNewTicketsDTO("Tr-065",1L,1);
+        var ticket2 = clientTicketsServices.getNewTicketsDTO("Tr-082",2L,2);
+        var ticket3 = clientTicketsServices.getNewTicketsDTO("Tr-055",2L,1);
+        System.out.println(ticket1);
+        System.out.println(ticket2);
+        System.out.println(ticket3);
     }
 
     private void initTrains() {

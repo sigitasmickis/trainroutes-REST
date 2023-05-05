@@ -31,7 +31,8 @@ public class TrainController {
 
     @GetMapping("trains/{trainNo}")
     ResponseEntity<TrainDTO> one(@PathVariable String trainNo) {
-        return new ResponseEntity<>(trainServices.getTrainByTrainNo(trainNo), HttpStatus.OK);
+        return new ResponseEntity<>(trainServices.getTrainDTOFromDb(
+                trainServices.getTrainByTrainNo(trainNo)), HttpStatus.OK);
     }
 
 

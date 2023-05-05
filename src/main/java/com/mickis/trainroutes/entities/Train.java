@@ -11,10 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "trains",
-uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"train_no"}, name = "train_number")
-})
+@Table(name = "trains")
+//uniqueConstraints = {
+//        @UniqueConstraint(columnNames = {"train_no"}, name = "train_number")
+//}
 @Getter
 @Setter
 @ToString
@@ -32,12 +32,12 @@ public class Train {
     private String trainNumber;
 
     @NonNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "citifrom_id", nullable = false)
     private City cityFrom;
 
     @NonNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "cityto_id", nullable = false)
     private City cityTo;
 

@@ -32,11 +32,11 @@ public class TrainServices {
         this.trainRepository = trainRepository;
     }
 
-    public Train createNewTrainDTO(String trainNumber,
-                                   String cityFrom,
-                                   String cityTo,
-                                   String departTime,
-                                   String arrivalTime, int priceRate) {
+    public Train createNewTrain(String trainNumber,
+                                String cityFrom,
+                                String cityTo,
+                                String departTime,
+                                String arrivalTime, int priceRate) {
 
         City dbCityFrom = cityRepository.findByName(cityFrom)
                 .orElseThrow(() -> new IllegalCityException(cityFrom));
@@ -75,10 +75,11 @@ public class TrainServices {
 
     }
 
-    public TrainDTO getTrainByTrainNo (String trainNo) {
-        return getTrainDTOFromDb(trainRepository.findByTrainNumber(trainNo)
-                .orElseThrow(() -> new TrainNotFoundException(trainNo)));
+    public Train getTrainByTrainNo(String trainNo) {
+        return trainRepository.findByTrainNumber(trainNo)
+                .orElseThrow(() -> new TrainNotFoundException(trainNo));
     }
+
 
     public LocalTime parseLocalTime(String timeStr) {
         LocalTime localTime;

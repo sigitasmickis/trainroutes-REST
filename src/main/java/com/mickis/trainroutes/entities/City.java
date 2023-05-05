@@ -11,7 +11,6 @@ import lombok.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@AllArgsConstructor
 @NoArgsConstructor(force = true)
 public class City {
 

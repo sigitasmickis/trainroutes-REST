@@ -9,6 +9,7 @@ import lombok.*;
 @EqualsAndHashCode
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class TrainDTO {
 
     @NonNull

@@ -20,16 +20,22 @@ import java.util.Set;
 public class Client {
 
 
+    public Client(long userId, int discout) {
+        this.userId = userId;
+        this.discount = discout;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
-    @Column
     private long userId;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Ticket> tickets = new HashSet<>();
+
+    private int discount;
 
     @Override
     public String toString() {

@@ -1,5 +1,6 @@
 package com.mickis.trainroutes.io;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 @Getter
@@ -7,15 +8,27 @@ import lombok.*;
 @ToString
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
+@AllArgsConstructor
+@EqualsAndHashCode
 public class TicketDTO {
-
-    @NonNull
-    private String trainNumber;
 
     @NonNull
     private long userId;
 
     @NonNull
-    private int quantity;
+    private String trainNumber;
+
+    private String cityFrom;
+
+    private String cityTo;
+
+    private String departTime;
+
+    private String arrivalTime;
+
+    @NonNull
+    private int userPrice;
+
+
 
 }
