@@ -1,7 +1,7 @@
 package com.mickis.trainroutes.controller;
 
 import com.mickis.trainroutes.errors.UniqueTrainAlreadyExistException;
-import com.mickis.trainroutes.errors.UpdatingTrainDTOBodyAndNumberMismatchException;
+import com.mickis.trainroutes.errors.UpdatingTrainDTOBodyAndTrainNumberMismatchException;
 import com.mickis.trainroutes.io.CitiesDTO;
 import com.mickis.trainroutes.io.TrainDTO;
 import com.mickis.trainroutes.io.TrainsDTO;
@@ -69,7 +69,7 @@ public class TrainController {
                 return new ResponseEntity<>(trainServices.updateTrain(trainDTO), HttpStatus.OK);
             }
         } else {
-            throw new UpdatingTrainDTOBodyAndNumberMismatchException(trainNo, trainDTO);
+            throw new UpdatingTrainDTOBodyAndTrainNumberMismatchException(trainNo, trainDTO);
         }
     }
 
