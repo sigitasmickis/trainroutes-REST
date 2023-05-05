@@ -10,7 +10,9 @@ Programos paleidimas
     Paleidimui TrainroutesRestApp - main metodas
 
 	MySQL pradinis duomenų sukūrimui
-		main metodo klasėje - CommandLineRunner run() initDao() (šiame commite po komentaru, neveiksnus)
+		main metodo klasėje - CommandLineRunner run() initDao() (šiame commite po komentaru, neveiksnus,
+									vieną kartą panaudojus vėl išjungti,
+									nes dubliuoja įrašus miestams ir bilietams, nėra apsaugos, kaip traukiniams)
 
     Jar package - trainroutes-0.0.1-SNAPSHOT-spring-boot.jar, paleidus inicijuoja db.
 
