@@ -20,6 +20,5 @@ public class City {
     private long id;
 
     @NonNull
-    @Column
     private String name;
 }

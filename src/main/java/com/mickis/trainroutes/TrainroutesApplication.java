@@ -42,7 +42,6 @@ public class TrainroutesApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 //        initDao();
-
     }
 
     private void initDao() {
@@ -55,9 +54,9 @@ public class TrainroutesApplication implements CommandLineRunner {
     }
 
     private void initTickets() {
-        var ticket1 = clientTicketsServices.getNewTicketsDTO("Tr-065",1L,1);
-        var ticket2 = clientTicketsServices.getNewTicketsDTO("Tr-082",2L,2);
-        var ticket3 = clientTicketsServices.getNewTicketsDTO("Tr-055",2L,1);
+        var ticket1 = clientTicketsServices.buyNewTicketsDTO("Tr-065",1L,1);
+        var ticket2 = clientTicketsServices.buyNewTicketsDTO("Tr-082",2L,2);
+        var ticket3 = clientTicketsServices.buyNewTicketsDTO("Tr-055",2L,1);
         System.out.println(ticket1);
         System.out.println(ticket2);
         System.out.println(ticket3);

@@ -1,21 +1,15 @@
 package com.mickis.trainroutes.controller;
 
-import com.mickis.trainroutes.io.TicketDTO;
 import com.mickis.trainroutes.io.TicketsDTO;
-import com.mickis.trainroutes.io.TrainsDTO;
 import com.mickis.trainroutes.repository.ClientTicketsServices;
 import com.mickis.trainroutes.repository.TrainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.format.DateTimeFormatter;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(value = "v1")
 public class ClientTicketsController {
 
 
@@ -27,14 +21,24 @@ public class ClientTicketsController {
     ClientTicketsServices clientTicketsServices;
 
 
-    @PostMapping("/users/{userId}/get_ticket")
-    public ResponseEntity<TicketsDTO> getTicket(@PathVariable Long userId, @RequestParam String trainNo,
+    @PostMapping("/users/{userId}/buy_tickets")
+    public ResponseEntity<TicketsDTO> buyTicket(@PathVariable Long userId, @RequestParam String trainNo,
                                                 @RequestParam(required = false) Integer quantity) {
         if (quantity == null) quantity = 1;
         return new ResponseEntity<>(new TicketsDTO(
-                clientTicketsServices.getNewTicketsDTO(trainNo, userId, quantity)),
+                clientTicketsServices.buyNewTicketsDTO(trainNo, userId, quantity)),
                 HttpStatus.OK);
     }
+
+    @GetMapping("/users/{userId}/get_tickets")
+    public ResponseEntity<TicketsDTO> getTicket(@PathVariable Long userId){
+        return new ResponseEntity<>(new TicketsDTO(
+                clientTicketsServices.getUserTicketsDTO(userId)),
+                HttpStatus.OK);
+    }
+
+
+
 
 
 

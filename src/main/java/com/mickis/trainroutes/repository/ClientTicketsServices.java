@@ -3,6 +3,7 @@ package com.mickis.trainroutes.repository;
 import com.mickis.trainroutes.entities.Client;
 import com.mickis.trainroutes.entities.Ticket;
 import com.mickis.trainroutes.entities.Train;
+import com.mickis.trainroutes.errors.ClientNotFoundException;
 import com.mickis.trainroutes.io.TicketDTO;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,12 @@ public class ClientTicketsServices {
     }
 
 
-    public List<TicketDTO> getNewTicketsDTO(String trainNo, long userId, int quantity) {
+    public List<TicketDTO> buyNewTicketsDTO(String trainNo, long userId, int quantity) {
         List<Ticket> ticketList = persistNewTicket(trainNo, userId, quantity);
+        return getTicketsDTOList(ticketList);
+    }
+
+    private List<TicketDTO> getTicketsDTOList(List<Ticket> ticketList) {
         return ticketList.stream()
                 .map(ticket -> getTicketDTOFromDb(ticket))
                 .collect(Collectors.toList());
@@ -63,5 +68,11 @@ public class ClientTicketsServices {
         ticketDTO.setDepartTime(ticket.getTrainId().getDepartTime().format(format));
         ticketDTO.setArrivalTime(ticket.getTrainId().getArrivalTime().format(format));
         return ticketDTO;
+    }
+
+    public List<TicketDTO> getUserTicketsDTO(Long userId) {
+        Client client = clientRepository.findByUserId(userId)
+                .orElseThrow(()-> new ClientNotFoundException(userId));
+        return getTicketsDTOList(client.getTickets().stream().toList());
     }
 }

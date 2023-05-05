@@ -140,7 +140,8 @@ public class TrainServices {
     }
 
     public void deleteTrain(String trainNo) {
-        Train train = trainRepository.findByTrainNumber(trainNo).orElseThrow();
+        Train train = trainRepository.findByTrainNumber(trainNo)
+                .orElseThrow(() -> new TrainNotFoundException(trainNo));
         trainRepository.deleteById(train.getId());
     }
 }
