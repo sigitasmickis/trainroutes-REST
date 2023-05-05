@@ -11,11 +11,11 @@ import org.springframework.context.ApplicationContext;
 
 
 @SpringBootApplication
-public class TrainroutesApplication implements CommandLineRunner {
+public class TrainroutesRestApp implements CommandLineRunner {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext =
-                SpringApplication.run(TrainroutesApplication.class, args);
+                SpringApplication.run(TrainroutesRestApp.class, args);
 //        for (String name: applicationContext.getBeanDefinitionNames()) {
 //            System.out.println(name);
 //        }

@@ -33,7 +33,7 @@ class CityTest {
     public void whenReadingCity_theyAreFoundByName() {
         var city = new City("Vilnius");
         var persistedCity = entityManager.persist(city);
-        var foundCity = cityRepository.findByName("Vilnius");
+        var foundCity = cityRepository.findByName("Vilnius").get();
         assertEquals(persistedCity,foundCity);
         System.out.println(foundCity);
     }
