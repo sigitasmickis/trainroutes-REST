@@ -1,6 +1,7 @@
 package com.mickis.trainroutes.controller;
 
 import com.mickis.trainroutes.errors.*;
+import com.mickis.trainroutes.io.TrainsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.List;
 
 @ControllerAdvice
 //@EnableWebMvc
@@ -29,9 +32,8 @@ public class GlobalExceptionAdvice {
     @ResponseBody
     @ExceptionHandler(TrainNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String trainNotFoundHandler(TrainNotFoundException ex) {
-        return ex.getMessage();
-    }
+    String trainNotFoundHandler(TrainNotFoundException ex) {return ex.getMessage();}
+
 
     @ResponseBody
     @ExceptionHandler(IllegalCityException.class)

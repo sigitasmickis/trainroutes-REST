@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class MissingRouteException extends RuntimeException{
 
    public MissingRouteException(String from, String to) {
-      super(String.format("There is no direct route between %s and %s", from, to));
+      super(String.format("%s - %s", from, to));
    }
 }
