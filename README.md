@@ -105,9 +105,9 @@ Duomenų formatas:
 
     GET /v1/users/{kliento_id}/get_tickets
 
-    Sukurti naują bilietą maršrutui
+    Pirkti naują bilietą maršrutui
 
-    /v1/users/{kliento_id}/buy_tickets?trainNo={traukinio_numeris}&(optional)quantity={bilietu_kiekis}
+    POST /v1/users/{kliento_id}/buy_tickets?trainNo={traukinio_numeris}&(optional)quantity={bilietu_kiekis}
     
 
 
